@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp" android:height="240dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+
+    <!-- Fundo cinza claro -->
+    <path android:fillColor="#FFE0E0E0" android:pathData="M2,2 H22 V22 H2 Z"/>
+
+    <!-- “montanhas” simples (efeito de foto) -->
+    <path android:fillColor="#FF9E9E9E" android:pathData="M4,16 L9,11 L13,15 L17,10 L20,16 Z"/>
+
+    <!-- bolinha (como sol) -->
+    <path android:fillColor="#FF757575" android:pathData="M7,8 A2,2 0 1,0 7,12 A2,2 0 1,0 7,8 Z"/>
+</vector>
