@@ -16,6 +16,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,12 +33,25 @@ android {
 }
 
 dependencies {
+    // AndroidX base
+    implementation 'androidx.core:core-ktx:1.13.1' // ok usar ktx mesmo em Java
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    implementation libs.appcompat
-    implementation libs.material
-    implementation libs.activity
-    implementation libs.constraintlayout
-    testImplementation libs.junit
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
+    // Listas
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+
+    // Lifecycle / MVVM
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.8.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.4'
+
+    // Navigation (Fragments + BottomNavigation)
+    implementation 'androidx.navigation:navigation-fragment:2.7.7'
+    implementation 'androidx.navigation:navigation-ui:2.7.7'
+
+    // Imagens (capa do álbum)
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+
 }
