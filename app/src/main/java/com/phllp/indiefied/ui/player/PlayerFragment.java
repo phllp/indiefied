@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import com.bumptech.glide.Glide;
 import com.phllp.indiefied.databinding.FragmentPlayerBinding;
-import com.phllp.indiefied.util.SimpleSeekBarChange;
 import com.phllp.indiefied.viewmodel.PlayerViewModel;
 
 public class PlayerFragment extends Fragment {
@@ -28,19 +28,15 @@ public class PlayerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
 
-        // Observa faixa atual
-        viewModel.getCurrentTrack().observe(getViewLifecycleOwner(), track -> {
-            binding.tvTitle.setText(track.getTitle());
-            binding.tvArtist.setText(track.getArtist());
-//            @todo implementar o carregamento de imagem de capa do album, por hora apenas o placeholder
-//            Glide.with(this).load(track.getCoverUrl()).into(binding.ivCover);
-        });
-
         // Controles
-        binding.btnPlayPause.setOnClickListener(v -> viewModel.togglePlay());
-        binding.btnNext.setOnClickListener(v -> viewModel.next());
-        binding.btnPrev.setOnClickListener(v -> viewModel.prev());
-        binding.seekBar.setOnSeekBarChangeListener(new SimpleSeekBarChange(pos -> viewModel.seekTo(pos)));
-        binding.toggleShuffle.setOnCheckedChangeListener((b, checked) -> viewModel.setShuffle(checked));
+        binding.btnPlayPause.setOnClickListener(v -> playMusic());
+    }
+
+    private void playMusic() {
+        boolean found = viewModel.playFromAppMusicDir("morango_do_nordeste.mp3");
+        if (!found) {
+             Toast.makeText(requireContext(),"Arquivo não encontrado",Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
