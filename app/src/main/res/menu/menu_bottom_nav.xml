@@ -1,14 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/playerFragment"
+        android:id="@+id/homeFragment"
         android:title="Home"
         android:icon="@drawable/ic_home"/>
     <item
-        android:id="@+id/libraryFragment"
-        android:title="Biblioteca"
-        android:icon="@drawable/ic_library_music"/>
-    <item
         android:id="@+id/searchFragment"
-        android:title="Meu Espaço"
+        android:title="Buscar"
+        android:icon="@drawable/ic_search"/>
+
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Perfil"
         android:icon="@drawable/ic_account"/>
 </menu>

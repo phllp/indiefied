@@ -6,15 +6,22 @@ import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 
+import com.phllp.indiefied.model.Track;
+
 import java.io.File;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class PlayerViewModel extends AndroidViewModel {
 
     private ExoPlayer player;
+    private final MutableLiveData<Track> currentTrack = new MutableLiveData<>(null);
+    private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(false);
 
     public PlayerViewModel(@NonNull Application app) {
         super(app);
@@ -23,7 +30,20 @@ public class PlayerViewModel extends AndroidViewModel {
     private void ensurePlayer() {
         if (player == null) {
             player = new ExoPlayer.Builder(getApplication()).build();
+            player.addListener(new androidx.media3.common.Player.Listener() {
+                @Override public void onIsPlayingChanged(boolean playing) {
+                    isPlaying.postValue(playing);
+                }
+            });
         }
+    }
+
+    public LiveData<Track> getCurrentTrack() {
+        return currentTrack;
+    }
+
+    public LiveData<Boolean> getIsPlaying() {
+        return isPlaying;
     }
 
     public ExoPlayer getPlayer() {
@@ -31,36 +51,46 @@ public class PlayerViewModel extends AndroidViewModel {
         return player;
     }
 
+    // Inicia reprodução a partir do Track (id = nome base do arquivo salvo em /files/Music/)
+    public boolean startPlayback(Track track) {
+        if (track == null || track.getId() == null) return false;
+        boolean ok = playById(track.getId());
+        if (ok) currentTrack.setValue(track);
+        return ok;
+    }
+
+
     /** Toca um arquivo específico pelo nome (ex.: "minha_musica.mp3") na pasta /files/Music */
     public boolean playFromAppMusicDir(String fileName) {
         File dir = getApplication().getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-//        System.out.println("");
         if (dir == null) return false;
         File f = new File(dir, fileName);
         if (!f.exists()) return false;
         return playFile(f);
     }
 
-    /** Varre a pasta /files/Music e toca o primeiro arquivo de áudio encontrado */
-    public boolean playFirstFromAppMusicDir() {
+    /** Reproduz arquivo procurando por id (com/sem extensão) dentro do app-specific Music */
+    public boolean playById(String id) {
+        if (id == null) return false;
+        id = id.trim();
         File dir = getApplication().getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         if (dir == null || !dir.exists()) return false;
 
-        File[] candidates = dir.listFiles(pathname -> {
-            if (pathname == null || !pathname.isFile()) return false;
-            String n = pathname.getName().toLowerCase();
-            return n.endsWith(".mp3") || n.endsWith(".m4a") || n.endsWith(".wav") || n.endsWith(".ogg");
-        });
+        // tenta id exato e id + “.*”
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) return false;
 
-        if (candidates == null || candidates.length == 0) return false;
+        String lid = id.toLowerCase(Locale.ROOT);
+        File match = null;
+        for (File f : files) {
+            String ln = f.getName().toLowerCase(Locale.ROOT);
+            if (ln.equals(lid) || ln.startsWith(lid + ".")) { match = f; break; }
+        }
+        if (match == null) return false;
 
-        // Opcional: ordenar alfabeticamente para previsibilidade
-        Arrays.sort(candidates, (a, b) -> a.getName().compareToIgnoreCase(b.getName()));
-
-        return playFile(candidates[0]);
+        return playFile(match);
     }
 
-    /** Toca um File diretamente */
     public boolean playFile(File file) {
         if (file == null || !file.exists()) return false;
         ensurePlayer();
@@ -68,13 +98,22 @@ public class PlayerViewModel extends AndroidViewModel {
         player.setMediaItem(item);
         player.prepare();
         player.play();
+        isPlaying.setValue(true);
         return true;
     }
 
-    /** Play/Pause simples (para o botão) */
+    // Alterna play/pause mantendo estado
     public void togglePlayPause() {
         ensurePlayer();
-        player.setPlayWhenReady(!player.getPlayWhenReady());
+        boolean toPlay = !player.getPlayWhenReady();
+        player.setPlayWhenReady(toPlay);
+        isPlaying.setValue(toPlay);
+    }
+
+    public void pause() {
+        ensurePlayer();
+        player.setPlayWhenReady(false);
+        isPlaying.setValue(false);
     }
 
     @Override

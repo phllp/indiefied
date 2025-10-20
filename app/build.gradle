@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id 'com.android.application'
 }
 
 android {
@@ -8,17 +8,14 @@ android {
 
     defaultConfig {
         applicationId "com.phllp.indiefied"
-        minSdk 36
-        targetSdk 36
+        minSdk 34
+        targetSdk 34
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures {
-        viewBinding true
-    }
+    buildFeatures { viewBinding true }
 
     buildTypes {
         release {
@@ -33,8 +30,12 @@ android {
 }
 
 dependencies {
+    // Firebase (BOM + Firestore)
+    implementation platform('com.google.firebase:firebase-bom:34.4.0')
+    implementation 'com.google.firebase:firebase-firestore'
+
     // AndroidX base
-    implementation 'androidx.core:core-ktx:1.13.1' // ok usar ktx mesmo em Java
+    implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -46,11 +47,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata:2.8.4'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.8.4'
 
-    // Navigation (Fragments + BottomNavigation)
+    // Navigation
     implementation 'androidx.navigation:navigation-fragment:2.7.7'
     implementation 'androidx.navigation:navigation-ui:2.7.7'
 
-    // Imagens (capa do álbum)
+    // Imagens
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
@@ -58,9 +59,6 @@ dependencies {
     implementation 'androidx.media3:media3-exoplayer:1.4.1'
     implementation 'androidx.media3:media3-ui:1.4.1'
     implementation 'androidx.media3:media3-session:1.4.1'
-
-    // Room (metadados)
-    implementation 'androidx.room:room-runtime:2.6.1'
-    annotationProcessor 'androidx.room:room-compiler:2.6.1'
-    implementation 'androidx.room:room-ktx:2.6.1'
 }
+
+apply plugin: 'com.google.gms.google-services'

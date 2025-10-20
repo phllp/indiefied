@@ -1,0 +1,29 @@
+  {
+    "project_info": {
+      "project_number": "512496446109",
+      "project_id": "morango-do-nordeste",
+      "storage_bucket": "morango-do-nordeste.firebasestorage.app"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:512496446109:android:c8223beb41569ecd694274",
+          "android_client_info": {
+            "package_name": "com.phllp.indiefied"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyAkLa2VH6xj_KwioOiv21NtZtI39wTR-p0"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

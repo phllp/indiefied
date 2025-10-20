@@ -4,8 +4,11 @@
     <!-- contentDescription / botões do player -->
     <string name="album_cover">Capa do álbum</string>
     <string name="prev">Anterior</string>
-    <string name="play">Reproduzir</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
     <string name="next">Próxima</string>
+    <string name="favorite">Favorite</string>
+    <string name="add">Adicionar</string>
 
     <!-- títulos das abas -->
     <string name="tab_player">Player</string>
